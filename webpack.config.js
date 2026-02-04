@@ -1,59 +1,63 @@
-const path = require("path");
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-const { CleanWebpackPlugin } = require("clean-webpack-plugin");
+const path = require('path');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = {
-    entry: "./src/index.tsx",
-    output: {
-        filename: "[name].[contenthash].js",
-        path: path.resolve(__dirname, "dist"),
-        publicPath: "/",
-    },
-    resolve: {
-        extensions: [".tsx", ".ts", ".js"],
-    },
-    devtool: "source-map",
-    module: {
-        rules: [
-            {
-                test: /\.(ts|js)x?$/,
-                exclude: /node_modules/,
-                use: [
-                    {
-                        loader: "babel-loader",
-                        options: {
-                            presets: [
-                                "@babel/preset-env",
-                                ["@babel/preset-react", { runtime: "automatic" }],
-                                "@babel/preset-typescript",
-                            ],
-                        },
-                    },
-                    'eslint-loader',
-                ],
+  entry: './src/index.tsx',
+  output: {
+    filename: '[name].[contenthash].js',
+    path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
+  },
+  resolve: {
+    extensions: ['.tsx', '.ts', '.js'],
+  },
+  devtool: 'source-map',
+  module: {
+    rules: [
+      {
+        test: /\.(ts|js)x?$/,
+        exclude: /node_modules/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: {
+              presets: [
+                '@babel/preset-env',
+                ['@babel/preset-react', { runtime: 'automatic' }],
+                '@babel/preset-typescript',
+              ],
             },
-            {
-                test: /\.css$/i,
-                use: ["style-loader", "css-loader"],
-            },
-            {
-                test: /\.(png|jpe?g|gif|svg)$/i,
-                type: "asset/resource",
-            },
+          },
         ],
-    },
-    plugins: [
-        new CleanWebpackPlugin(),
-        new HtmlWebpackPlugin({
-            template: "./public/index.html",
-        }),
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)$/i,
+        type: 'asset/resource',
+      },
     ],
-    devServer: {
-        static: "./dist",
-        hot: true,
-        historyApiFallback: true,
-        port: 3000,
-        open: true,
-    },
-    mode: "development",
+  },
+  plugins: [
+    new CleanWebpackPlugin(),
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+    }),
+    new ESLintPlugin({
+      extensions: ['js', 'jsx', 'ts', 'tsx'],
+      configType: 'eslintrc',
+    }),
+  ],
+  devServer: {
+    static: './dist',
+    hot: true,
+    historyApiFallback: true,
+    port: 3000,
+    open: true,
+  },
+  mode: 'development',
 };
